@@ -11,3 +11,13 @@ app.use(
     credentials: true,
   })
 );
+
+// routes
+
+import authRoutes from "./routes/auth.routes";
+import userRoutes from "./routes/user.routes";
+
+app.use("/api/v1", authRoutes);
+app.use("/api/v1", userRoutes);
+
+export { app };
