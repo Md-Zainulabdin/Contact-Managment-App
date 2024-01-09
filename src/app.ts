@@ -11,13 +11,15 @@ app.use(
     credentials: true,
   })
 );
+app.use(express.json()); // parse requests of content-type - application/json
+app.use(express.urlencoded({ extended: true })); 
 
 // routes
 
 import authRoutes from "./routes/auth.routes";
 import userRoutes from "./routes/user.routes";
 
-app.use("/api/v1", authRoutes);
 app.use("/api/v1", userRoutes);
+app.use("/api/v1", authRoutes);
 
 export { app };

@@ -3,7 +3,8 @@ import { Router } from "express";
 const router = Router();
 
 router.route("/user").post((req, res) => {
-  res.send("Hello world");
+  const { name, email, password } = req.body;
+  
 });
 
 export default router;
