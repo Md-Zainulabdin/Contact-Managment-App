@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import User from "../models/user.model";
+import bcrypt from "bcrypt";
 
 export const SignUpUser = async (req: Request, res: Response) => {
   try {
@@ -19,10 +20,12 @@ export const SignUpUser = async (req: Request, res: Response) => {
         .json({ msg: "User with this email already exist!" });
     }
 
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const user = await User.create({
       name,
       email,
-      password,
+      password: hashedPassword,
     });
 
     return res.status(201).json({ msg: "User created successfully" });
@@ -35,13 +38,61 @@ export const SignUpUser = async (req: Request, res: Response) => {
 };
 
 export const removeUser = async (req: Request, res: Response) => {
-  const { userId } = req.query;
+  try {
+    const id = req.params.id;
 
-  if (!userId) {
-    return res.status(400).json({ msg: "UserID is required!" });
+    if (!id) {
+      return res.status(400).json({ msg: "id is required!" });
+    }
+
+    const deletedUser = await User.deleteOne({
+      _id: id,
+    });
+
+    return res.status(200).json({ msg: "User deleted!" });
+  } catch (error) {
+    console.log(`User-Removed-Error`);
+    return res
+      .status(500)
+      .json({ msg: "An error occured while removing user" });
   }
+};
 
-  const deletedUser = await User.deleteOne({
-    
-  });
+export const updateUser = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+
+    const { name, email } = req.body;
+
+    if ([name, email].some((field) => field.trim() === "")) {
+      return res.status(400).json({ msg: "Every field is required!" });
+    }
+
+    if (!id) {
+      return res.status(400).json({ msg: "id is required!" });
+    }
+
+    const updatedUser = await User.findOneAndUpdate({
+      _id: id,
+      name,
+      email,
+    });
+
+    return res.status(200).json({ msg: "User Updated!", user: updatedUser });
+  } catch (error) {
+    console.log(`User-Updated-Error`);
+    return res
+      .status(500)
+      .json({ msg: "An error occured while updating user" });
+  }
+};
+
+export const getAllUser = async (req: Request, res: Response) => {
+  try {
+    const users = await User.find({});
+    return res.status(200).json({ users });
+  } catch (error) {
+    console.log(`User-Get-Error`);
+    return res.status(500).json({ msg: "An error occured while getting user" });
+  }
 };
