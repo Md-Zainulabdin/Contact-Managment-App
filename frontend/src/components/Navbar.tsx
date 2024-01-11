@@ -4,7 +4,8 @@ import { cookies } from "next/headers";
 
 const Navbar = () => {
   const cookie = cookies();
-  const session = cookie.get("auth_token");
+  // const session = cookie.get("auth_token");
+  const session = true;
   return (
     <nav className="flex h-20 w-full items-center justify-between border-b px-4 md:px-16">
       <div className="logo">
@@ -21,7 +22,9 @@ const Navbar = () => {
         </Link>
 
         {session ? (
-          <Button size={"sm"}>Login</Button>
+          <Button size={"sm"} className="px-6">
+            <Link href="/auth/login">Login</Link>
+          </Button>
         ) : (
           <Button size={"sm"} variant={"outline"}>
             Logout
