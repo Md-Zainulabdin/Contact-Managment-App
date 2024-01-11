@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import { Request, Response } from "express";
 import User from "../models/user.model";
 import bcrypt from "bcrypt";
+import { tokenName } from "../config/constant";
 
 export const loginUser = async (req: Request, res: Response) => {
   try {
@@ -41,10 +42,17 @@ export const loginUser = async (req: Request, res: Response) => {
       name: user.name,
       email: user.email,
     };
+
     // Return the token and user data
-    res.json({ token, responseUser });
+    res
+      .cookie(tokenName, token, {
+        expires: new Date(Date.now() + 86400000),
+        httpOnly: true,
+        signed: true,
+      })
+      .json({ token, responseUser });
   } catch (error) {
-    console.log(`User-Login-Error`);
+    console.log(`User-Login-Error`, error);
     return res.status(500).json({ msg: "An error occured while logging user" });
   }
 };

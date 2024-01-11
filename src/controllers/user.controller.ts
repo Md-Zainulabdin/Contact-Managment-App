@@ -10,6 +10,13 @@ export const SignUpUser = async (req: Request, res: Response) => {
       return res.status(400).json({ msg: "Every field is required!" });
     }
 
+    const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/; // testing left
+
+    if (!emailRegex.test(email)) {
+      res.status(403).send({ message: `Please enter a valid Email!` });
+      return;
+    }
+
     const isUserExist = await User.findOne({
       email: email,
     });
@@ -24,7 +31,7 @@ export const SignUpUser = async (req: Request, res: Response) => {
 
     const user = await User.create({
       name,
-      email,
+      email: email.toLowerCase(),
       password: hashedPassword,
     });
 

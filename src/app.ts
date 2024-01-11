@@ -1,5 +1,9 @@
 import express from "express";
+import cookieParser from "cookie-parser";
+import dotenv from "dotenv";
 import cors from "cors";
+
+dotenv.config();
 
 const app = express();
 
@@ -12,7 +16,8 @@ app.use(
   })
 );
 app.use(express.json()); // parse requests of content-type - application/json
-app.use(express.urlencoded({ extended: true })); 
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser(process.env.COOKIE_SECRET));
 
 // routes
 
