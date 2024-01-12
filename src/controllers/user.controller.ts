@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import User from "../models/user.model";
 import bcrypt from "bcrypt";
+import { verifyEmail } from "../helpers";
 
 export const SignUpUser = async (req: Request, res: Response) => {
   try {
@@ -10,9 +11,7 @@ export const SignUpUser = async (req: Request, res: Response) => {
       return res.status(400).json({ msg: "Every field is required!" });
     }
 
-    const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/; // testing left
-
-    if (!emailRegex.test(email)) {
+    if (verifyEmail(email)) {
       res.status(403).send({ message: `Please enter a valid Email!` });
       return;
     }
