@@ -19,6 +19,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { baseUrl } from "@/constants";
+import { setToken } from "@/helpers";
 
 // Define the form schema
 const formSchema = z.object({
@@ -53,7 +54,7 @@ const LoginForm: React.FC = () => {
       if (response?.data?.token) {
         // Save token to cookie and redirect user to dashboard page
         const token = response?.data?.token;
-        document.cookie = `auth_token=${token}`;
+        setToken(token);
       }
     } catch (error) {
       console.log("error", error);

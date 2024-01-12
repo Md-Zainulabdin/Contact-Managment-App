@@ -8,7 +8,6 @@ const contactSchema = new Schema({
     trim: true,
     required: true,
   },
-  password: { type: String, required: true },
   phone: { type: String, required: true },
   created_at: {
     type: Date,

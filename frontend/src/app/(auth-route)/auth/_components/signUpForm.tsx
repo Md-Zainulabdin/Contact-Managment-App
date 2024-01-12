@@ -51,7 +51,10 @@ const RegisterForm: React.FC = () => {
     try {
       const response = await axios.post(`${baseUrl}/user`, data);
 
-      console.log(response);
+      if (response.data) {
+        // Redirect to Login after successful registration
+        router.push("/auth/login");
+      }
     } catch (error) {
       console.log("error", error);
     } finally {
