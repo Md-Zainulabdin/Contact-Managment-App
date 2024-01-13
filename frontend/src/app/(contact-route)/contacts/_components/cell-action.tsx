@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import axios from "axios";
 import { Contact } from "@/types";
+import AlertModal from "@/components/modals/Alert-Modal";
 
 interface CellActionProps {
   data: Contact;
@@ -29,10 +30,10 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const onDeleteHandler = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/contact/${data.id}`);
+      await axios.delete(`/contact/${data._id}`);
       router.refresh();
     } catch (error) {
-        console.log("Error deleting contact", error);
+      console.log("Error deleting contact", error);
     } finally {
       setLoading(false);
       setOpen(false);
@@ -41,12 +42,12 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 
   return (
     <>
-      {/* <AlertModal
+      <AlertModal
         isOpen={open}
         onClose={() => setOpen(false)}
         onConfirm={onDeleteHandler}
         loading={loading}
-      /> */}
+      />
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -57,11 +58,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[150px]">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem
-            onClick={() => {
-              router.push(`/contacts/update/${data.id}`);
-            }}
-          >
+          <DropdownMenuItem onClick={() => setOpen(!open)}>
             <Edit className="mr-2 h-4 w-4" />
             Update
           </DropdownMenuItem>

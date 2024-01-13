@@ -4,7 +4,7 @@ export interface User {
 }
 
 export interface Contact {
-  id: string;
+  _id: any;
   name: string;
   email: string;
   phone: string;

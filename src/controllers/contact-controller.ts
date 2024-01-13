@@ -44,6 +44,23 @@ export const getAllContact = async (req: Request, res: Response) => {
   }
 };
 
+export const getContactById = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+
+    if (!id) {
+      return res.status(400).json({ msg: "id is required!" });
+    }
+    const contact = await Contact.findOne({
+      _id: id,
+    });
+    return res.status(200).json({ contact });
+  } catch (error) {
+    console.log("Error in getting contact", error);
+    return res.status(500).json({ error: "Server Error!" });
+  }
+};
+
 export const updateContact = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
